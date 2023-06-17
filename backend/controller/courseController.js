@@ -242,8 +242,6 @@ const applicationResponse = asyncHandler(async (req,res) =>{
 }
 );
 
-
-
 // @dec: Get all courses by Tutor ID
 // route: GET /api/course/getAllByTutorId
 // @access: Private
@@ -265,6 +263,8 @@ const applicationResponse = asyncHandler(async (req,res) =>{
 // @desc: Get All Students By Course Id
 // route: GET /api/course/getAllStudentsByCourseId
 // @access: Private
+
+
 
 
 
