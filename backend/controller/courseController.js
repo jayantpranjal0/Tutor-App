@@ -139,8 +139,7 @@ const getCourseById = asyncHandler(async (req,res) =>{
 // route: GET /api/course/getAllByTutorId
 // @access: Private
 const getAllCoursesByTutorId = asyncHandler(async (req,res) =>{
-    console.log(req.params)
-    const courses=await Course.find({tutor:req.params.id});
+    const courses=await Course.find({tutor:req.user._id});
     res.json(courses);
 }
 );
