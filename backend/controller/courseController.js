@@ -263,7 +263,16 @@ const applicationResponse = asyncHandler(async (req,res) =>{
 // @desc: Get All Students By Course Id
 // route: GET /api/course/getAllStudentsByCourseId
 // @access: Private
-
+const getAllStudentsByCourseId = asyncHandler(async (req,res) =>{
+    const course=await Course.find({course:req.params.id});
+    try{
+        res.json(course?course:[]);
+    }catch{
+        res.status(500);
+        throw new Error('Server Error');
+    }
+    
+})
 
 
 
