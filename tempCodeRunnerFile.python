@@ -1,9 +1,0 @@
-import requests
-
-for i in range(10000):
-    r = requests.post('http://localhost:3001/api/users/register', json={
-    "name": "Test Name",
-    "email": f"test{i+13+100}@test.com",
-    "password": "test",
-    })
-    print(f"Status Code: {r.status_code}, Response: {r.json()}")
