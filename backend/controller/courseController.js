@@ -7,7 +7,7 @@ import Application from '../models/course/applicationModel.js';
 // route : POST /api/course/create
 // @access : Private
 const createCourse = asyncHandler(async (req,res) =>{
-    var {courseID,courseDescription,tutor,deliveryMethod,maximumCapacity,courseFee,materialFee,courseImage,courseStartDate,courseEndDate,courseName} = req.body;
+    var {courseID,courseDescription,deliveryMethod,maximumCapacity,courseFee,materialFee,courseImage,courseStartDate,courseEndDate,courseName} = req.body;
     courseStartDate=Date(courseStartDate);
     courseEndDate=Date(courseEndDate);
     const courseExists=await Course.findOne({courseID});
@@ -19,7 +19,7 @@ const createCourse = asyncHandler(async (req,res) =>{
         courseID,
         courseName,
         courseDescription,
-        tutor,
+        tutor:req.user._id,
         deliveryMethod,
         maximumCapacity,
         courseFee,
@@ -285,4 +285,4 @@ const getAllStudentsByCourseId = asyncHandler(async (req,res) =>{
 
 
 
-export {createCourse,getAllCourses,getCourseById,getAllCoursesByTutorId,getAllCoursesByStudentId,applyCourse,applicationRequests,applicationResponse};
+export {createCourse,getAllCourses,getCourseById,getAllCoursesByTutorId,getAllCoursesByStudentId,applyCourse,applicationRequests,applicationResponse,getAllStudentCoursesByStudentID,getAllTutorCoursesByTutorID,getAllStudentsByCourseId,};
