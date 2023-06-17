@@ -8,8 +8,8 @@ route : POST /api/user/auth
  */
 const authUser = asyncHandler(async (req,res) =>{
     const {email,password} = req.body;
-    console.log(email)
-    console.log(password)
+    // console.log(email)
+    // console.log(password)
     const user=await User.findOne({ email });
     if(user && (await user.matchPassword(password))){
         generateToken(res,user._id)
@@ -76,7 +76,7 @@ route : GET /api/user/profile
 @access : Private
  */
 const getUserProfile = asyncHandler(async (req,res) =>{
-    const user=await User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
     if(user){
         res.status(200).json({
             _id:user._id,
@@ -98,6 +98,7 @@ route : PUT /api/user/profile
  */
 const updateUserProfile = asyncHandler(async (req,res) =>{
     const user=await User.findById(req.user._id);
+    
     if(user){
         user.name=req.body.name || user.name;
         user.email=req.body.email || user.email;

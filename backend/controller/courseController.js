@@ -1,42 +1,46 @@
 import asyncHandler from 'express-async-handler';
 import Course from '../models/course/courseModel.js';
 import User from '../models/user/userModel.js';
+import Application from '../models/course/applicationModel.js';
 
 // @desc : Create Course
 // route : POST /api/course/create
 // @access : Private
 const createCourse = asyncHandler(async (req,res) =>{
-    const {course_id,course_description,tutor,delivery_method,maxium_capacity,course_fee,material_fee,course_image,course_start_date,course_end_date} = req.body;
-    const courseExists=await Course.findOne({course_id});
+    var {courseID,courseDescription,tutor,deliveryMethod,maximumCapacity,courseFee,materialFee,courseImage,courseStartDate,courseEndDate,courseName} = req.body;
+    courseStartDate=Date(courseStartDate);
+    courseEndDate=Date(courseEndDate);
+    const courseExists=await Course.findOne({courseID});
     if(courseExists){
         res.status(400);
         throw new Error('Course Already Exists');
     }
     const course=await Course.create({
-        course_id,
-        course_description,
+        courseID,
+        courseName,
+        courseDescription,
         tutor,
-        delivery_method,
-        maxium_capacity,
-        course_fee,
-        material_fee,
-        course_image,
-        course_start_date,
-        course_end_date
+        deliveryMethod,
+        maximumCapacity,
+        courseFee,
+        materialFee,
+        courseImage,
+        courseStartDate,
+        courseEndDate,
     });
     if(course){
         res.status(201).json({
             _id:course._id,
-            course_id:course.course_id,
-            course_description:course.course_description,
+            courseID:course.courseID,
+            courseDescription:course.courseDescription,
             tutor:course.tutor,
-            delivery_method:course.delivery_method,
-            maxium_capacity:course.maxium_capacity,
-            course_fee:course.course_fee,
-            material_fee:course.material_fee,
-            course_image:course.course_image,
-            course_start_date:course.course_start_date,
-            course_end_date:course.course_end_date
+            deliveryMethod:course.deliveryMethod,
+            maximumCapacity:course.maximumCapacity,
+            courseFee:course.courseFee,
+            materialFee:course.materialFee,
+            courseImage:course.courseImage,
+            courseStartDate:Date(course.courseStartDate),
+            courseEndDate:Date(course.courseEndDate)
         });
     }else{
         res.status(400);
@@ -60,9 +64,9 @@ const getAllCourses = asyncHandler(async (req,res) =>{
 // @desc : Get Course By Id
 // route : GET /api/course/getById
 // @access : Public
-
 const getCourseById = asyncHandler(async (req,res) =>{
-    const course=await Course.findById(req.params.id);
+    console.log(req.params)
+    const course=await Course.find({courseID:req.params.id});
     if(course){
         res.json(course);
     }else{
@@ -75,59 +79,59 @@ const getCourseById = asyncHandler(async (req,res) =>{
 
 
 
-// @desc: Update Course
-// route: PUT /api/course/update
-// @access: Private
-const updateCourse = asyncHandler(async (req,res) =>{
-    const course=await Course.findById(req.params.id);
-    if(course){
-        course.course_id=req.body.course_id || course.course_id;
-        course.course_description=req.body.course_description || course.course_description;
-        course.tutor=req.body.tutor || course.tutor;
-        course.delivery_method=req.body.delivery_method || course.delivery_method;
-        course.maxium_capacity=req.body.maxium_capacity || course.maxium_capacity;
-        course.course_fee=req.body.course_fee || course.course_fee;
-        course.material_fee=req.body.material_fee || course.material_fee;
-        course.course_image=req.body.course_image || course.course_image;
-        course.course_start_date=req.body.course_start_date || course.course_start_date;
-        course.course_end_date=req.body.course_end_date || course.course_end_date;
-        const updatedCourse=await course.save();
-        res.json({
-            _id:updatedCourse._id,
-            course_id:updatedCourse.course_id,
-            course_description:updatedCourse.course_description,
-            tutor:updatedCourse.tutor,
-            delivery_method:updatedCourse.delivery_method,
-            maxium_capacity:updatedCourse.maxium_capacity,
-            course_fee:updatedCourse.course_fee,
-            material_fee:updatedCourse.material_fee,
-            course_image:updatedCourse.course_image,
-            course_start_date:updatedCourse.course_start_date,
-            course_end_date:updatedCourse.course_end_date
-        });
-    }else{
-        res.status(404);
-        throw new Error('Course Not Found');
-    }
-}
-);
+// // @desc: Update Course
+// // route: PUT /api/course/update
+// // @access: Private
+// const updateCourse = asyncHandler(async (req,res) =>{
+//     const course=await Course.findById(req.params.id);
+//     if(course){
+//         course.courseID=req.body.courseID || course.courseID;
+//         course.courseDescription=req.body.courseDescription || course.courseDescription;
+//         course.tutor=req.body.tutor || course.tutor;
+//         course.deliveryMethod=req.body.deliveryMethod || course.deliveryMethod;
+//         course.maximumCapacity=req.body.maximumCapacity || course.maximumCapacity;
+//         course.courseFee=req.body.courseFee || course.courseFee;
+//         course.materialFee=req.body.materialFee || course.materialFee;
+//         course.courseImage=req.body.courseImage || course.courseImage;
+//         course.courseStartDate=req.body.courseStartDate || course.courseStartDate;
+//         course.courseEndDate=req.body.courseEndDate || course.courseEndDate;
+//         const updatedCourse=await course.save();
+//         res.json({
+//             _id:updatedCourse._id,
+//             courseID:updatedCourse.courseID,
+//             courseDescription:updatedCourse.courseDescription,
+//             tutor:updatedCourse.tutor,
+//             deliveryMethod:updatedCourse.deliveryMethod,
+//             maximumCapacity:updatedCourse.maximumCapacity,
+//             courseFee:updatedCourse.courseFee,
+//             materialFee:updatedCourse.materialFee,
+//             courseImage:updatedCourse.courseImage,
+//             courseStartDate:updatedCourse.courseStartDate,
+//             courseEndDate:updatedCourse.courseEndDate
+//         });
+//     }else{
+//         res.status(404);
+//         throw new Error('Course Not Found');
+//     }
+// }
+// );
 
 
 
-// @desc: Delete Course
-// route: DELETE /api/course/delete
-// @access: Private
-const deleteCourse = asyncHandler(async (req,res) =>{
-    const course=await Course.findById(req.params.id);
-    if(course){
-        await course.remove();
-        res.json({message:'Course Removed'});
-    }else{
-        res.status(404);
-        throw new Error('Course Not Found');
-    }
-}
-);
+// // @desc: Delete Course
+// // route: DELETE /api/course/delete
+// // @access: Private
+// const deleteCourse = asyncHandler(async (req,res) =>{
+//     const course=await Course.findById(req.params.id);
+//     if(course){
+//         await course.remove();
+//         res.json({message:'Course Removed'});
+//     }else{
+//         res.status(404);
+//         throw new Error('Course Not Found');
+//     }
+// }
+// );
 
 
 
@@ -135,6 +139,7 @@ const deleteCourse = asyncHandler(async (req,res) =>{
 // route: GET /api/course/getAllByTutorId
 // @access: Private
 const getAllCoursesByTutorId = asyncHandler(async (req,res) =>{
+    console.log(req.params)
     const courses=await Course.find({tutor:req.params.id});
     res.json(courses);
 }
@@ -159,22 +164,26 @@ const getAllCoursesByStudentId = asyncHandler(async (req,res) =>{
 // route: POST /api/course/apply
 // @access: Private
 const applyCourse = asyncHandler(async (req,res) =>{
-    const course=await Course.findById(req.params.id);
-    const user=await User.findById(req.user._id);
-    if(course){
-        if(course.students.includes(user._id)){
-            res.status(400);
-            throw new Error('You Already Applied For This Course');
+    const applicationRequest={course:req.body.courseID,student:req.user._id};
+    // console.log(applicationRequest)
+    const applicationExists=await Application.findOne(applicationRequest);
+    console.log(applicationExists)
+    if(applicationExists){
+        res.status(400);
+        throw new Error('Already Applied');
+    }
+    else{
+        const application = await Application.create({
+            course:req.body.courseID,
+            student:req.user._id,
+            status:'Pending'
+        });
+        if(application){
+            res.status(200).json({"message":"Applied Successfully"})
         }else{
-            course.students.push(user._id);
-            user.courses.push(course._id);
-            await course.save();
-            await user.save();
-            res.json({message:'Applied Successfully'});
+            res.status(400);
+            throw new Error('Invalid Application Data');
         }
-    }else{
-        res.status(404);
-        throw new Error('Course Not Found');
     }
 }
 );
@@ -195,3 +204,31 @@ const applicationRequests = asyncHandler(async (req,res) =>{
     }
 }
 );
+
+// const acceptApplication = asyncHandler(async (req,res) =>{
+//     const course=await Course.findById(req.params.id);
+//     if(course){
+//         course.students.push(req.body.studentId);
+//         await course.save();
+//         res.json({message:'Accepted Successfully'});
+//     }else{
+//         res.status(404);
+//         throw new Error('Course Not Found');
+//     }
+// }
+// );
+
+const applicationResponse = asyncHandler(async (req,res) =>{
+    const course=await Course.findById(req.params.id);
+    if(course){
+        course.students.push(req.body.studentId);
+        await course.save();
+        res.json({message:'Accepted Successfully'});
+    }else{
+        res.status(404);
+        throw new Error('Course Not Found');
+    }
+}
+);
+
+export {createCourse,getAllCourses,getCourseById,getAllCoursesByTutorId,getAllCoursesByStudentId,applyCourse,applicationRequests,applicationResponse};

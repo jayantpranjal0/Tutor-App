@@ -1,30 +1,63 @@
+// import jwt from 'jsonwebtoken';
+// import asyncHandler from 'express-async-handler';
+// import User from '../models/user/userModel.js';
+
+
+// const protect = asyncHandler(async (req,res,next) =>{
+//     let token;
+//     token=req.cookies.jwt;
+//     // console.log('Req: ',req.cookies.jwt)
+//     console.log('Token: ',req.cookies.jwt)
+//     if(token){
+//         try{
+//             console.log('Inside try')
+//             const decoded=jwt.verify(token,process.env.JWT_SECRET);
+//             console.log(process.env.JWT_SECRET)
+//             console.log(decoded.userID)
+//             req.user=await User.findById(decoded.userID).select('-password');
+//         }
+//         catch{
+//             res.status(401);
+//             throw new Error('Not Authorized');
+//         }
+//     }else{
+//         res.status(401);
+//         throw new Error('Not Authorized');
+//     }
+// });
+
+
+
+// export {
+//     protect
+// };
+    
+
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/user/userModel.js';
 
+const protect = asyncHandler(async (req, res, next) => {
+  let token;
 
-const protect = asyncHandler(async (req,res,next) =>{
-    let token;
-    token=req.cookies.token;
+  token = req.cookies.jwt;
+  if (token) {
+    try {
+        
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if(token){
-        try{
-            const decoded=jwt.verify(token,process.env.JWT_SECRET);
-            req.user=await User.findById(decoded.id).select('-password');
-        }
-        catch{
-            res.status(401);
-            throw new Error('Not Authorized');
-        }
-    }else{
-        res.status(401);
-        throw new Error('Not Authorized');
+      req.user = await User.findById(decoded.userID).select('-password');
+      // console.log(req.user)
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error('Not authorized, token failed');
     }
+  } else {
+    res.status(401);
+    throw new Error('Not authorized, no token');
+  }
 });
 
-
-
-export {
-    protect
-};
-    
+export { protect };

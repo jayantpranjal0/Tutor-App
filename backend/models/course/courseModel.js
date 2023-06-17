@@ -2,15 +2,15 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const courseSchema = mongoose.Schema({
-    course_name:{
+    courseName:{
         type: String,
         required: true
     },
-    course_id:{
+    courseID:{
         type: String,
         required: true
     },
-    course_description:{
+    courseDescription:{
         type: String,
         required: true
     },
@@ -22,42 +22,34 @@ const courseSchema = mongoose.Schema({
         type: Array,
         default:[]
     },
-    delivery_method:{
+    deliveryMethod:{
         type: String,
         required:true
     },
-    maxium_capacity: {
-        type: number,
+    maximumCapacity: {
+        type: String,
         required:true
     },
-    course_fee:{
-        type: number,
-        required:number
-    },
-    material_fee:{
-        type: number,
+    courseFee:{
+        type: String,
         required:true
     },
-    course_image:{
+    materialFee:{
+        type: String,
+        required:true
+    },
+    courseImage:{
         type: String,
         required:false
     },
-    course_start_date:{
+    courseStartDate:{
         type: Date,
         required:true
     },
-    course_end_date:{
+    courseEndDate:{
         type: Date,
         required:true
     },
-    courseStudents:{
-        type: Array,
-        default:[]
-    },
-    courseRequests:{
-        type: Array,
-        default:[]
-    }
 }, {
     timestamps:true
 });
