@@ -245,19 +245,27 @@ const applicationResponse = asyncHandler(async (req,res) =>{
 // @dec: Get all courses by Tutor ID
 // route: GET /api/course/getAllByTutorId
 // @access: Private
-
+const getAllTutorCoursesByTutorID = asyncHandler(async (req,res) =>{
+    const courses=await Course.find({tutor:req.user._id});
+    res.json(courses);
+}
+);
 
 
 
 // @dec: Get all courses by Student ID
 // route: GET /api/course/getAllByStudentId
 // @access: Private
+const getAllStudentCoursesByStudentID = asyncHandler(async (req,res) =>{
+    const courses=await Course.find({students:req.user._id});
+    res.json(courses);
+}
+);
 
 
 
-// @desc: Get All Student Courses
-// route: GET /api/course/getAllStudentCourses
-// @access: Private
+
+
 
 
 // @desc: Get All Students By Course Id
