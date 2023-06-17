@@ -195,12 +195,11 @@ const applyCourse = asyncHandler(async (req,res) =>{
 // route: POST /api/course/applicationRequests
 // @access: Private
 const applicationRequests = asyncHandler(async (req,res) =>{
-    const course=await Course.findById(req.params.id);
-    if(course){
-        res.json(course.students);
+    const applications=await Application.find({course:req.params.id});
+    if(applications){
+        res.json(applications);
     }else{
-        res.status(404);
-        throw new Error('Course Not Found');
+        res.json({});
     }
 }
 );
@@ -219,16 +218,54 @@ const applicationRequests = asyncHandler(async (req,res) =>{
 // );
 
 const applicationResponse = asyncHandler(async (req,res) =>{
-    const course=await Course.findById(req.params.id);
-    if(course){
-        course.students.push(req.body.studentId);
-        await course.save();
-        res.json({message:'Accepted Successfully'});
+    const application=await Application.findById(req.params.id);
+    if(req.body.status==='Accepted'){
+        const course=await Course.findById(application.course);
+        if(course){
+            course.students.push(application.student);
+            await course.save();
+            application.status='Accepted';
+            await application.save();
+            res.json({message:'Accepted Successfully'});
+        }else{
+            res.status(404);
+            throw new Error('Course Not Found');
+        }
+    }else if(req.body.status==='Rejected'){
+        application.status='Rejected';
+        await application.save();
+        res.json({message:'Rejected Successfully'});
     }else{
         res.status(404);
-        throw new Error('Course Not Found');
+        throw new Error('Invalid Status');
     }
 }
 );
+
+
+
+// @dec: Get all courses by Tutor ID
+// route: GET /api/course/getAllByTutorId
+// @access: Private
+
+
+
+
+// @dec: Get all courses by Student ID
+// route: GET /api/course/getAllByStudentId
+// @access: Private
+
+
+
+// @desc: Get All Student Courses
+// route: GET /api/course/getAllStudentCourses
+// @access: Private
+
+
+// @desc: Get All Students By Course Id
+// route: GET /api/course/getAllStudentsByCourseId
+// @access: Private
+
+
 
 export {createCourse,getAllCourses,getCourseById,getAllCoursesByTutorId,getAllCoursesByStudentId,applyCourse,applicationRequests,applicationResponse};
