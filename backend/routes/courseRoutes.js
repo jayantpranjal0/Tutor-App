@@ -6,7 +6,6 @@ import {
     getAllCoursesByStudentId,
     getAllCoursesByTutorId,
     applyCourse,
-    applicationRequests,
     applicationResponse
   } from "../controller/courseController.js";
 const router = express.Router();
@@ -20,6 +19,6 @@ router.route("/register").post(protect, createCourse);
 router.route("/getcourse/:id").get(protect, getCourseById);
 router.route("/tutor/:id").get(protect, getAllCoursesByTutorId);
 router.route("/apply").post(protect, applyCourse);
-router.route("/requests/:id").get(protect, applicationRequests).put(protect, applicationResponse);
+router.route("/requests/:id").put(protect, applicationResponse);
 
 export default router;
